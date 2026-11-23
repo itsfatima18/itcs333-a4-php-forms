@@ -21,5 +21,5 @@ function validate_email(string $v): bool
 function validate_length(string $v, int $min, int $max): bool
 {
     // TODO: return true when mb_strlen($v) is within [$min, $max]
-   $len = mb_strlen($v);
+    $len = function_exists('mb_strlen') ? mb_strlen($v, 'UTF-8') : strlen($v);
     return $len >= $min && $len <= $max;}

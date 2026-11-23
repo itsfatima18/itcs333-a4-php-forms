@@ -1,4 +1,4 @@
-
+<?php
 /**
  * ITCS333 A4 starter — contact form.
  * Requirements (see README rubric):
@@ -8,25 +8,29 @@
  *   - valid POST: redirect (302/303) to a success page (PRG)
  *   - escape all output with htmlspecialchars
  */
-
-
-<?php
 declare(strict_types=1);
+error_reporting(E_ALL);
 
 require_once __DIR__ . '/../src/validate.php';
 
 function e(string $s): string
 {
-    return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function post_field(string $key): string
+{
+    $v = $_POST[$key] ?? '';
+    return is_string($v) ? trim($v) : '';
 }
 
 $values = ['name' => '', 'email' => '', 'message' => ''];
 $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name    = trim((string)($_POST['name'] ?? ''));
-    $email   = trim((string)($_POST['email'] ?? ''));
-    $message = trim((string)($_POST['message'] ?? ''));
+if (($_SERVER['REQUEST_METHOD'] ?? 'GET') === 'POST') {
+    $name    = post_field('name');
+    $email   = post_field('email');
+    $message = post_field('message');
 
     $values = ['name' => $name, 'email' => $email, 'message' => $message];
 
